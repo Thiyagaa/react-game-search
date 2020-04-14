@@ -1,15 +1,30 @@
 import React from "react";
+import _ from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretSquareDown } from '@fortawesome/free-solid-svg-icons'
 class Table extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            list: []
+            list: [],
+            sortedField:''
         }
     }
-    componentWillReceiveProps(nextProps) {
-        this.setState({ list: nextProps.items })
+
+    static getDerivedStateFromProps(nextProps, prevState){
+        if(!_.isEqual(nextProps.items,prevState.list) && !prevState.sortedField){
+            return {
+                list: nextProps.items,
+                sortedField:prevState.sortedField
+              };
+        } else if(!_.isEqual(nextProps.items,prevState.list) && prevState.sortedField){
+            return {
+                list: prevState.list,
+                sortedField:''
+              };
+        }else{
+            return null;
+        }
     }
     onSortChange(cName) {
         const listCopy = [...this.state.list]
@@ -30,14 +45,15 @@ class Table extends React.Component {
             else return 0
         })
         this.setState({
-            list: sortedUsers
+            list: sortedUsers,
+            sortedField: cName
         });
     };
 
     render() {
 
-        return (
-            this.state.list.length > 0 && (
+        return (    
+            this.state.list && this.state.list.length > 0 ?  (
                 <table className='text-left'>
                     <thead>
                         <tr>
@@ -73,7 +89,7 @@ class Table extends React.Component {
                     </thead>
                     <tbody>
                         {this.state.list.map(p => (
-                            <tr id={p.Rank}>
+                            <tr key={p.Rank}>
                                 <td>{p.Rank}</td>
                                 <td>{p.Name}</td>
                                 <td>{p.Platform}</td>
@@ -85,8 +101,8 @@ class Table extends React.Component {
                         ))}
                     </tbody>
                 </table>
-            )
-        );
+            ):(<table className='text-left'></table>)
+        )
     }
 
 }

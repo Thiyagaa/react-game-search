@@ -3,4 +3,3 @@ node_modules/
 package-lock.json
 search-games.code-workspace
 build/
-public/
