@@ -18,7 +18,7 @@ function getConfig(file){
     return readJsonFileSync(filepath);
 }
 
-json = getConfig('../../../hackerearth/challenges/numerator/TopSellingGames.json');
+json = getConfig('./TopSellingGames.json');
 
 var corsOptions = {
   origin: function (origin, callback) {
